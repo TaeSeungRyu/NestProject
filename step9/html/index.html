@@ -1,0 +1,51 @@
+<html>
+    <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+    <title>index</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+
+<body>
+    <button type="button" onclick="sendData()">sendData</button>
+</body>
+
+</html>
+
+<script>
+function getCookie(cname) {
+    let name = cname + "=";
+    let decodedCookie = decodeURIComponent(document.cookie);
+    let ca = decodedCookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
+
+let csrfToken;
+
+fetch('getCsrf') //토큰을 발급 받습니다.
+    .then((response) => {
+        csrfToken = getCookie('XSRF-TOKEN'); 
+        console.log(csrfToken)   
+    });
+
+function sendData() {
+    console.log('보내기위한 값',csrfToken)
+    fetch('getCsrf', {  //토큰을 가지고 인증합니다
+        method: 'POST',  //POST, PUT 등 데이터를 변화하는 요청에 의해 동작합니다
+        headers: {
+            'XSRF-TOKEN':  csrfToken,
+            //'XSRF-TOKEN':  'hahah',
+        },
+        body: {data:1234}
+    }).then((res)=>console.log(res));         
+}
+</script>
