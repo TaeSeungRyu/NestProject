@@ -1,0 +1,35 @@
+<html>
+<head>
+    <script src="https://cdn.socket.io/4.3.2/socket.io.min.js"
+        integrity="sha384-KAZ4DtjNhLChOB/hxXuKqhMLYvx3b5MlT55xPEiNmREKRzeEm+RVPlTnAn0ajQNs"
+        crossorigin="anonymous"></script>
+    <script>
+        function makeid(length) {
+            var result = '';
+            var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            var charactersLength = characters.length;
+            for (var i = 0; i < length; i++) {
+                result += characters.charAt(Math.floor(Math.random() * charactersLength));
+            }
+            return result;
+        }
+        const id = makeid(5);
+        const socket = io('http://localhost:3131');
+        socket.on('users', function (data) {
+            console.log('Connected', data);
+        });
+        socket.on('chat', function (data) {
+            console.log('event', data);
+        });
+        function send() {
+            socket.emit('chat', { test: 'test', data : id });
+        }
+    </script>
+</head>
+
+<body>
+    <button onclick="send()">send test</button>
+
+</body>
+
+</html>
